@@ -1,0 +1,8 @@
+{
+  "name": "staffim-utils",
+  "main": "dist/staffim-utils.js",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-concat": "~0.3.0"
+  }
+}
