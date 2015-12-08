@@ -154,6 +154,7 @@
 'use strict';
 (function() {
     angular.module('staffimUtils')
+        .config(baseRouter)
         .run(stateChangeSuccess)
         .run(locationChangeSuccess)
         .run(stateChangeError);
@@ -189,6 +190,14 @@
     function stateChangeError($rootScope) {
         $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
             console.info(error);
+        });
+    }
+
+    baseRouter.$inject = ['$locationProvider'];
+    function baseRouter($locationProvider) {
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
         });
     }
 })();
