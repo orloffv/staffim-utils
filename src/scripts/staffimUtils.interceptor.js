@@ -4,8 +4,8 @@
         .factory('SUhttpInterceptor', SUhttpInterceptor)
         .config(setInterceptor);
 
-    SUhttpInterceptor.$inject = ['$rootScope', 'SA_EVENTS', 'SU_EVENTS', '$q'];
-    function SUhttpInterceptor($rootScope, SA_EVENTS, SU_EVENTS, $q) {
+    SUhttpInterceptor.$inject = ['$rootScope', 'SU_EVENTS', '$q'];
+    function SUhttpInterceptor($rootScope, SU_EVENTS, $q) {
         var service = {};
 
         service.responseError = responseError;
@@ -13,9 +13,7 @@
         return service;
 
         function responseError(response) {
-            if (response.status === 401) {
-                $rootScope.$broadcast(SA_EVENTS.ACCESS_TOKEN_EXPIRED, response);
-            } else if (response.status === 404) {
+            if (response.status === 404) {
                 $rootScope.$broadcast(SU_EVENTS.FAILED_REQUEST_404, response);
             }
 
