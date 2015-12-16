@@ -4,8 +4,8 @@
         .factory('SUhttpInterceptor', SUhttpInterceptor)
         .config(setInterceptor);
 
-    SUhttpInterceptor.$inject = ['$rootScope', 'SU_EVENTS', '$q'];
-    function SUhttpInterceptor($rootScope, SU_EVENTS, $q) {
+    SUhttpInterceptor.$inject = ['$rootScope', 'SU_EVENTS', '$q', 'CONFIG'];
+    function SUhttpInterceptor($rootScope, SU_EVENTS, $q, CONFIG) {
         var service = {};
 
         service.responseError = responseError;
@@ -14,7 +14,9 @@
 
         function responseError(response) {
             if (response.status === 404) {
-                $rootScope.$broadcast(SU_EVENTS.FAILED_REQUEST_404, response);
+                if (response.config.url.indexOf(CONFIG.apiUrl) !== -1) {
+                    $rootScope.$broadcast(SU_EVENTS.FAILED_REQUEST_404, response);
+                }
             }
 
             return $q.reject(response);
