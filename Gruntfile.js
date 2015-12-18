@@ -15,7 +15,8 @@ module.exports = function(grunt) {
                     'src/scripts/staffimUtils.state.js',
                     'src/scripts/staffimUtils.underscore.js',
                     'src/scripts/staffimUtils.waves.js',
-                    'src/scripts/staffimUtils.uploader.js'
+                    'src/scripts/staffimUtils.uploader.js',
+                    'src/scripts/staffimUtils.logger.js'
                 ],
                 dest: './dist/staffim-utils.js'
             }
