@@ -2,6 +2,7 @@
 (function() {
     angular.module('staffimUtils')
         .factory('SUhttpInterceptor', SUhttpInterceptor)
+        .config(compilerProvider)
         .config(setInterceptor);
 
     SUhttpInterceptor.$inject = ['$rootScope', 'SU_EVENTS', '$q', 'CONFIG'];
@@ -26,5 +27,12 @@
     setInterceptor.$inject = ['$httpProvider'];
     function setInterceptor($httpProvider) {
         $httpProvider.interceptors.push('SUhttpInterceptor');
+    }
+
+    compilerProvider.$inject = ['$compileProvider', 'CONFIG'];
+    function compilerProvider($compileProvider, CONFIG) {
+        if (CONFIG.debug === false) {
+            $compileProvider.debugInfoEnabled(false);
+        }
     }
 })();
