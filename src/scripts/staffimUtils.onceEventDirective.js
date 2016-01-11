@@ -101,17 +101,19 @@
                 compile: function($element, attr) {
                     return function(scope, element) {
                         scope.$watch('running', function(isRunning) {
-                            if (eventName === 'submit') {
-                                if (element[0].nodeName === 'FORM') {
-                                    updateButton(element.find('button[type="submit"]'), isRunning);
+                            if (!_.isUndefined(isRunning)) {
+                                if (eventName === 'submit') {
+                                    if (element[0].nodeName === 'FORM') {
+                                        updateButton(element.find('button[type="submit"]'), isRunning);
+                                    }
                                 }
                             }
                         });
                         element.on(eventName, function(event) {
                             if (!scope.running) {
                                 scope.$apply(function() {
-                                    var result = $parse(attr[directiveName])(scope, {$event: event});
                                     scope.running = true;
+                                    var result = $parse(attr[directiveName])(scope, {$event: event});
                                     if (!angular.isUndefined(result) && angular.isObject(result) && !angular.isUndefined(result.finally)) {
                                         result.finally(function() {
                                             scope.running = false;
