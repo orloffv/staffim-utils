@@ -630,13 +630,13 @@
 
                 var clickHandler = function(event) {
                     if (hasHref) {
-                        if (scope.running && page.stateStatus === 'loading') {
+                        if (scope.anchorRunning && page.stateStatus === 'loading') {
                             preventDefault = true;
                         } else {
-                            scope.running = true;
+                            scope.anchorRunning = true;
                             if (!stateChangeHandler) {
                                 stateChangeHandler = $rootScope.$on('$stateChangeSuccess', function() {
-                                    scope.running = false;
+                                    scope.anchorRunning = false;
                                     stateChangeHandler();
                                 });
                             }
@@ -677,7 +677,7 @@
                 restrict: 'A',
                 compile: function($element, attr) {
                     return function(scope, element) {
-                        scope.$watch('running', function(isRunning) {
+                        scope.$watch('eventRunning', function(isRunning) {
                             if (!_.isUndefined(isRunning)) {
                                 if (eventName === 'submit') {
                                     if (element[0].nodeName === 'FORM') {
@@ -687,16 +687,16 @@
                             }
                         });
                         element.on(eventName, function(event) {
-                            if (!scope.running) {
+                            if (!scope.eventRunning) {
                                 scope.$apply(function() {
-                                    scope.running = true;
+                                    scope.eventRunning = true;
                                     var result = $parse(attr[directiveName])(scope, {$event: event});
                                     if (!angular.isUndefined(result) && angular.isObject(result) && !angular.isUndefined(result.finally)) {
                                         result.finally(function() {
-                                            scope.running = false;
+                                            scope.eventRunning = false;
                                         });
                                     } else {
-                                        scope.running = false;
+                                        scope.eventRunning = false;
                                     }
                                 });
                             }
