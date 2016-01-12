@@ -568,8 +568,21 @@
                 options: '@suUrlOptions'
             },
             link: function ($scope, element) {
-                element.attr('ui-sref', SUUrlService.getStateName($scope.model, $scope.route, $scope.params));
-                element.attr('href', SUUrlService.getUrl($scope.model, $scope.route, $scope.params, $scope.options));
+                setHref(element);
+                $scope.$watch('model', function(newVal, oldVal) {
+                    if (!_.isEqual(getHref(newVal), getHref(oldVal))) {
+                        setHref(element);
+                    }
+                });
+
+                function setHref(element) {
+                    element.attr('ui-sref', SUUrlService.getStateName($scope.model, $scope.route, $scope.params));
+                    element.attr('href', getHref($scope.model));
+                }
+
+                function getHref(model) {
+                    return SUUrlService.getUrl(model, $scope.route, $scope.params, $scope.options);
+                }
             }
         };
     }
