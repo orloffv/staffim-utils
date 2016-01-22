@@ -147,11 +147,9 @@
         function setTitle(state) {
             var title = '';
             if (angular.isDefined(state.data) && angular.isDefined(state.data.title)) {
-                if (angular.isDefined(state.data.title)) {
-                    title  = $interpolate(state.data.title)(state.locals.globals);
-                }
+                title  = $interpolate(state.data.title)(state.locals.globals);
             } else if (angular.isDefined(state.title)) {
-                title  = state.title;
+                title  = $interpolate(state.title)(state.locals.globals);
             }
             $rootScope.pageTitle = title;
         }
