@@ -2,6 +2,7 @@
 (function() {
     angular.module('staffimUtils')
         .config(baseRouter)
+        .config(otherwiseRouter)
         .run(stateChangeSuccess)
         .run(locationChangeSuccess)
         .run(stateChangeError);
@@ -45,6 +46,26 @@
         $locationProvider.html5Mode({
             enabled: true,
             requireBase: false
+        });
+    }
+
+    otherwiseRouter.$inject = ['$urlRouterProvider'];
+    function otherwiseRouter($urlRouterProvider) {
+        $urlRouterProvider.otherwise(function($injector) {
+            var $state = $injector.get('$state');
+            if ($injector.has('SAService')) {
+                var SAService = $injector.get('SAService');
+
+                SAService.isAuthorized()
+                    .then(function() {
+                        $state.go('auth.404', {}, {location: false});
+                    })
+                    .catch(function() {
+                        $state.go('public.login');
+                    });
+            } else {
+                return $state.go('auth.404', {}, {location: false});
+            }
         });
     }
 })();
