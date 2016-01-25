@@ -14,9 +14,13 @@
         return service;
 
         function responseError(response) {
-            if (response.status === 404) {
-                if (response.config.url.indexOf(CONFIG.apiUrl) !== -1) {
+            if (response.config.url.indexOf(CONFIG.apiUrl) !== -1) {
+                if (response.status === 404) {
                     $rootScope.$broadcast(SU_EVENTS.FAILED_REQUEST_404, response);
+                } else if (response.status === 403) {
+                    $rootScope.$broadcast(SU_EVENTS.FAILED_REQUEST_403, response);
+                } else if (response.status === 500) {
+                    $rootScope.$broadcast(SU_EVENTS.FAILED_REQUEST_500, response);
                 }
             }
 
