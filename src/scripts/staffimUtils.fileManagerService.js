@@ -1,6 +1,7 @@
 'use strict';
 (function() {
     angular.module('staffimUtils')
+        .config(fileManagerWhiteList)
         .service('SUFileManager', SUFileManager);
 
     SUFileManager.$inject = ['CONFIG'];
@@ -22,5 +23,13 @@
                 return CONFIG.assetsUrl + path;
             }
         };
+    }
+
+    fileManagerWhiteList.$inject = ['CONFIG', '$sceDelegateProvider'];
+    function fileManagerWhiteList(CONFIG, $sceDelegateProvider) {
+        $sceDelegateProvider.resourceUrlWhitelist([
+            'self',
+            CONFIG.apiUrl + '/**'
+        ]);
     }
 })();
