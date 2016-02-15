@@ -308,6 +308,11 @@
             }
 
             return collection;
+        },
+        insertArray: function(collection, position, item) {
+            collection.splice(position, 0, item);
+
+            return collection;
         }
     });
 })();
