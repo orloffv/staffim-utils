@@ -54,7 +54,7 @@
                             date = moment(val);
                         }
 
-                        return date.day(1).format('YYYY-MM-DDT00:00:00.000') + 'Z';
+                        return date.isoday(1).format('YYYY-MM-DDT00:00:00.000') + 'Z';
                     }
 
                     return null;
@@ -68,7 +68,7 @@
                             date = moment(val);
                         }
 
-                        return date.day(7).format('YYYY-MM-DDT00:00:00.000') + 'Z';
+                        return date.isoday(7).format('YYYY-MM-DDT00:00:00.000') + 'Z';
                     }
 
                     return null;
@@ -82,7 +82,7 @@
                             date = moment(val);
                         }
 
-                        return date.day(1).toDate();
+                        return date.isoday(1).toDate();
                     }
 
                     return null;

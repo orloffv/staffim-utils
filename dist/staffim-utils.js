@@ -347,15 +347,19 @@
             url: '/',
             ngfAllowDir: false,
             ngfMaxSize: '10MB',
-            accept: 'image/*',
-            allowEmptyResponse: false
+            accept: '\'image/*\'',
+            allowEmptyResponse: false,
+            acceptDropClass: '',
+            rejectDropClass: ''
         })
         .service('SUUploader', function($q, Upload, cfpLoadingBar, SUUploaderOptions) {
             var defaults = {
                 ngfAllowDir: SUUploaderOptions.ngfAllowDir,
                 ngfMaxSize: SUUploaderOptions.ngfMaxSize,
                 accept: SUUploaderOptions.accept,
-                allowEmptyResponse: SUUploaderOptions.allowEmptyResponse
+                allowEmptyResponse: SUUploaderOptions.allowEmptyResponse,
+                acceptDropClass: SUUploaderOptions.acceptDropClass,
+                rejectDropClass: SUUploaderOptions.rejectDropClass
             };
 
             var Uploader = function(opts, object, url, isImage) {
@@ -368,6 +372,12 @@
                     this.url = url || SUUploaderOptions.url;
                     this.options = angular.extend({}, defaults, opts);
                     object.accept = this.options.accept;
+                    this.options.ngfAccept = this.options.accept;
+                    this.options.ngfDragOverClass = {
+                        accept: this.options.acceptDropClass,
+                        reject: this.options.rejectDropClass,
+                        pattern: this.options.accept
+                    };
 
                     Upload.setDefaults(this.options);
                 };
@@ -578,7 +588,7 @@
                             date = moment(val);
                         }
 
-                        return date.day(1).format('YYYY-MM-DDT00:00:00.000') + 'Z';
+                        return date.isoday(1).format('YYYY-MM-DDT00:00:00.000') + 'Z';
                     }
 
                     return null;
@@ -592,7 +602,7 @@
                             date = moment(val);
                         }
 
-                        return date.day(7).format('YYYY-MM-DDT00:00:00.000') + 'Z';
+                        return date.isoday(7).format('YYYY-MM-DDT00:00:00.000') + 'Z';
                     }
 
                     return null;
@@ -606,7 +616,7 @@
                             date = moment(val);
                         }
 
-                        return date.day(1).toDate();
+                        return date.isoday(1).toDate();
                     }
 
                     return null;

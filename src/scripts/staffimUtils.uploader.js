@@ -5,15 +5,19 @@
             url: '/',
             ngfAllowDir: false,
             ngfMaxSize: '10MB',
-            accept: 'image/*',
-            allowEmptyResponse: false
+            accept: '\'image/*\'',
+            allowEmptyResponse: false,
+            acceptDropClass: '',
+            rejectDropClass: ''
         })
         .service('SUUploader', function($q, Upload, cfpLoadingBar, SUUploaderOptions) {
             var defaults = {
                 ngfAllowDir: SUUploaderOptions.ngfAllowDir,
                 ngfMaxSize: SUUploaderOptions.ngfMaxSize,
                 accept: SUUploaderOptions.accept,
-                allowEmptyResponse: SUUploaderOptions.allowEmptyResponse
+                allowEmptyResponse: SUUploaderOptions.allowEmptyResponse,
+                acceptDropClass: SUUploaderOptions.acceptDropClass,
+                rejectDropClass: SUUploaderOptions.rejectDropClass
             };
 
             var Uploader = function(opts, object, url, isImage) {
@@ -26,6 +30,12 @@
                     this.url = url || SUUploaderOptions.url;
                     this.options = angular.extend({}, defaults, opts);
                     object.accept = this.options.accept;
+                    this.options.ngfAccept = this.options.accept;
+                    this.options.ngfDragOverClass = {
+                        accept: this.options.acceptDropClass,
+                        reject: this.options.rejectDropClass,
+                        pattern: this.options.accept
+                    };
 
                     Upload.setDefaults(this.options);
                 };
