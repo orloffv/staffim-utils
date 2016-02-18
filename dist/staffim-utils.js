@@ -1,5 +1,5 @@
 (function(){
-    angular.module('staffimUtils', ['ui.router']);
+    angular.module('staffimUtils', ['ui.router', 'staffimAuth']);
     angular.module('staffimUtils.uploader', ['ngFileUpload'])
 })();
 
@@ -894,8 +894,8 @@
         .config(fileManagerWhiteList)
         .service('SUFileManager', SUFileManager);
 
-    SUFileManager.$inject = ['CONFIG'];
-    function SUFileManager(CONFIG) {
+    SUFileManager.$inject = ['CONFIG', 'SAService'];
+    function SUFileManager(CONFIG, SAService) {
         return {
             remote: function(id, params) {
                 var queryString = '';
@@ -911,6 +911,15 @@
             },
             local: function(path) {
                 return CONFIG.assetsUrl + path;
+            },
+            remoteWithAccesToken: function(path, params) {
+                params = _.extend({
+                    token: SAService.getAccessToken()
+                }, params || {});
+
+                var queryString = '?' + $.param(params);
+
+                return CONFIG.apiUrl + path + queryString;
             }
         };
     }
