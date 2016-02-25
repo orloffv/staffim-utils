@@ -5,12 +5,12 @@
 
     function fileSizeFilter() {
         var units = [
-            'bytes',
-            'KB',
-            'MB',
-            'GB',
-            'TB',
-            'PB'
+            'байт',
+            'Кб',
+            'Мб',
+            'Гб',
+            'Тб',
+            'Пб'
         ];
 
         return function(bytes, precision) {

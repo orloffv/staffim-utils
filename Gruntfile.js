@@ -24,7 +24,8 @@ module.exports = function(grunt) {
                     'src/scripts/staffimUtils.onceEventDirective.js',
                     'src/scripts/staffimUtils.backButtonDirective.js',
                     'src/scripts/staffimUtils.fileManagerService.js',
-                    'src/scripts/staffimUtils.fileSizeFilter.js'
+                    'src/scripts/staffimUtils.fileSizeFilter.js',
+                    'src/scripts/staffimUtils.distanceFilter.js'
                 ],
                 dest: './dist/staffim-utils.js'
             }
