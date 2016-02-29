@@ -23,6 +23,16 @@
             collection.splice(position, 0, item);
 
             return collection;
+        },
+        copyModel: function(original, copyModel) {
+            copyModel = angular.copy(original, copyModel);
+            _.each(original, function(item, key) { //Hack for hasMany relation save
+                if (_.isObject(item) && _.has(item, '$scope')) {
+                    copyModel[key] = item;
+                }
+            }, this);
+
+            return copyModel;
         }
     });
 })();
