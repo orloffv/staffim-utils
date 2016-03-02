@@ -1,6 +1,6 @@
 (function(){
-    angular.module('staffimUtils', ['ui.router', 'staffimAuth']);
-    angular.module('staffimUtils.uploader', ['ngFileUpload'])
+    angular.module('staffimUtils', ['ui.router']);
+    angular.module('staffimUtils.uploader', ['ngFileUpload', 'staffimAuth'])
 })();
 
 'use strict';
@@ -900,7 +900,7 @@
 
 'use strict';
 (function() {
-    angular.module('staffimUtils')
+    angular.module('staffimUtils.uploader')
         .config(fileManagerWhiteList)
         .service('SUFileManager', SUFileManager);
 

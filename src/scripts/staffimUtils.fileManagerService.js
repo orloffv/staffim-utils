@@ -1,6 +1,6 @@
 'use strict';
 (function() {
-    angular.module('staffimUtils')
+    angular.module('staffimUtils.uploader')
         .config(fileManagerWhiteList)
         .service('SUFileManager', SUFileManager);
 
