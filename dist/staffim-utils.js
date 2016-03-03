@@ -213,14 +213,15 @@
         });
     }
 
-    stateChangeError.$inject = ['$rootScope', '$state'];
-    function stateChangeError($rootScope, $state) {
+    stateChangeError.$inject = ['$rootScope', '$state', 'SULogger'];
+    function stateChangeError($rootScope, $state, SULogger) {
         $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
             if (error.redirect) {
                 return $state.go(error.redirect.name, error.redirect.params);
             }
 
-            console.info(error);
+
+            SULogger.error(event, error);
         });
     }
 
