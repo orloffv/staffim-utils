@@ -7,8 +7,8 @@
         .run(locationChangeSuccess)
         .run(stateChangeError);
 
-    stateChangeSuccess.$inject = ['SUPageService', '$rootScope', '$state'];
-    function stateChangeSuccess(pageService, $rootScope, $state) {
+    stateChangeSuccess.$inject = ['SUPageService', '$rootScope', '$state', '$anchorScroll'];
+    function stateChangeSuccess(pageService, $rootScope, $state, $anchorScroll) {
         $rootScope.$on('$stateChangeSuccess', function(event, toState) {
             pageService.stateStatus = 'loaded';
             pageService.setTitle($state.$current);
@@ -18,6 +18,7 @@
                 bodyClass = toState.data.bodyClass;
             }
             pageService.setBodyClass(bodyClass);
+            $anchorScroll();
         });
     }
 
