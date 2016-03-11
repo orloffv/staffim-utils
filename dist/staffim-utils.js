@@ -91,13 +91,17 @@
                     }
                 };
 
-                $rootScope.$on('$stateChangeSuccess', function() {
+                var cleanstateChangeSuccess = $rootScope.$on('$stateChangeSuccess', function() {
                     markActiveLink($state.current.name, $state.$current);
                 });
 
                 $timeout(function() {
                     markActiveLink($state.current.name, $state.$current);
                 }, 10);
+
+                $scope.$on('$destroy', function() {
+                    cleanstateChangeSuccess();
+                });
             }
         };
     }
