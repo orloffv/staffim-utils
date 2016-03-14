@@ -190,8 +190,8 @@
         .run(locationChangeSuccess)
         .run(stateChangeError);
 
-    stateChangeSuccess.$inject = ['SUPageService', '$rootScope', '$state', '$anchorScroll'];
-    function stateChangeSuccess(pageService, $rootScope, $state, $anchorScroll) {
+    stateChangeSuccess.$inject = ['SUPageService', '$rootScope', '$state', '$anchorScroll', 'SUAnalytic'];
+    function stateChangeSuccess(pageService, $rootScope, $state, $anchorScroll, SUAnalytic) {
         $rootScope.$on('$stateChangeSuccess', function(event, toState) {
             pageService.stateStatus = 'loaded';
             pageService.setTitle($state.$current);
@@ -202,6 +202,7 @@
             }
             pageService.setBodyClass(bodyClass);
             $anchorScroll();
+            SUAnalytic.hit();
         });
     }
 
@@ -1020,5 +1021,37 @@
         $uibTooltipProvider.options({
             appendToBody: true
         });
+    }
+})();
+
+'use strict';
+(function() {
+    angular.module('staffimUtils')
+        .service('SUAnalytic', SUAnalytic);
+
+    SUAnalytic.$inject = ['$state', '$rootScope', '$window'];
+    function SUAnalytic($state, $rootScope, $window) {
+        return {
+            hit: function() {
+                try {
+                    var url = '/' + _.replaceAll($state.current.name, /\./, '/');
+                    var params = $state.params;
+                    $window.yaCounter.hit(url, {
+                        params: params,
+                        title: $rootScope.pageTitle
+                    });
+                } catch (e) {}
+            },
+            goal: function(key, value) {
+                try {
+                    $window.yaCounter.reachGoal(key, value);
+                } catch (e) {}
+            },
+            init: function(params) {
+                try {
+                    $window.yaCounter.params(params);
+                } catch (e) {}
+            }
+        };
     }
 })();
