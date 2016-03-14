@@ -16,7 +16,8 @@
     function SULogger($window, $injector) {
         var logger,
             faker = {
-                error: function() {}
+                error: function() {},
+                init: function() {}
             },
             rollbar = {
                 isSupported: function() {
@@ -27,28 +28,23 @@
 
                     return $window.Rollbar.error(name, error);
                 },
+                init: function(person) {
+                    this.person = person;
+                },
                 configure: function() {
                     var $state = $injector.get('$state');
-                    /*
-                    if (authManager.getCurrentUser()) {
-                        person = {
-                            id: authManager.getCurrentUser().id,
-                            username: authManager.getCurrentUser().getFullName(),
-                            email: authManager.getCurrentUser().email
-                        };
-                    }
-                    */
                     $window.Rollbar.configure({
                         payload: {
                             environment: $window.location.hostname.toLowerCase(),
                             server: {
                                 host: $window.location.hostname
                             },
-                            //person: person,
+                            person: this.person,
                             context: $state.current.name
                         }
                     });
-                }
+                },
+                person: {}
             },
             local = {
                 isSupported: function() {
@@ -65,7 +61,8 @@
                     }
 
                     console.error.apply(console, params);
-                }
+                },
+                init: function() {}
             };
 
         if (rollbar.isSupported()) {
