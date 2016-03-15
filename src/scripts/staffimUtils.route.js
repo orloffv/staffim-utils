@@ -43,7 +43,6 @@
                 return $state.go(error.redirect.name, error.redirect.params);
             }
 
-
             SULogger.error(event, error);
         });
     }
