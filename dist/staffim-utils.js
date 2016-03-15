@@ -486,6 +486,7 @@
         var logger,
             faker = {
                 error: function() {},
+                info: function() {},
                 init: function() {}
             },
             rollbar = {
@@ -496,6 +497,11 @@
                     this.configure();
 
                     return $window.Rollbar.error(name, error);
+                },
+                info: function(name, message) {
+                    this.configure();
+
+                    return $window.Rollbar.info(name, message);
                 },
                 init: function(person) {
                     this.person = person;
@@ -530,6 +536,14 @@
                     }
 
                     console.error.apply(console, params);
+                },
+                info: function(name, message) {
+                    var params = ['Info: %s. ', name];
+                    if (message) {
+                        params.push(message);
+                    }
+
+                    console.info.apply(console, params);
                 },
                 init: function() {}
             };
