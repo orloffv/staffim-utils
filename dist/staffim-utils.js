@@ -195,8 +195,8 @@
         .run(locationChangeSuccess)
         .run(stateChangeError);
 
-    stateChangeSuccess.$inject = ['SUPageService', '$rootScope', '$state', '$anchorScroll', 'SUAnalytic'];
-    function stateChangeSuccess(pageService, $rootScope, $state, $anchorScroll, SUAnalytic) {
+    stateChangeSuccess.$inject = ['SUPageService', '$rootScope', '$state', '$anchorScroll', 'SUAnalytic', 'SULogger'];
+    function stateChangeSuccess(pageService, $rootScope, $state, $anchorScroll, SUAnalytic, SULogger) {
         $rootScope.$on('$stateChangeSuccess', function(event, toState) {
             pageService.stateStatus = 'loaded';
             pageService.setTitle($state.$current);
@@ -208,6 +208,7 @@
             pageService.setBodyClass(bodyClass);
             $anchorScroll();
             SUAnalytic.hit();
+            SULogger.changeState(toState);
         });
     }
 
@@ -485,8 +486,8 @@
         };
     }
 
-    SULogger.$inject = ['$window', '$injector'];
-    function SULogger($window, $injector) {
+    SULogger.$inject = ['$window', '$injector', 'moment'];
+    function SULogger($window, $injector, moment) {
         var logger,
             faker = {
                 error: function() {},
@@ -519,7 +520,8 @@
                                 host: $window.location.hostname
                             },
                             person: this.person,
-                            context: $state.current.name
+                            context: $state.current.name,
+                            timeline: JSON.stringify(this.timeline)
                         }
                     });
                 },
@@ -559,6 +561,35 @@
         } else {
             logger = faker;
         }
+
+        logger.timeline = [];
+        logger.changeState = function(state) {
+            logger.pushTimeline({
+                controller: state.controller,
+                name: state.name
+            }, 'changeState');
+        };
+        logger.ngClick = function(element, functionName) {
+            logger.pushTimeline({
+                innerHtml: element[0].innerHTML,
+                functionName: functionName
+            }, 'ngClick');
+        };
+        logger.ngSubmit = function(element, functionName) {
+            logger.pushTimeline({
+                functionName: functionName,
+                attributes: element.attr()
+            }, 'ngSubmit');
+        };
+        logger.pushTimeline = function(data, type) {
+            if (_.size(logger.timeline) > 20) {
+                logger.timeline = _.last(logger.timeline, 20);
+            }
+
+            data.timeline = moment().unix();
+            data.type = type;
+            logger.timeline.push(data);
+        };
 
         return logger;
     }
@@ -857,7 +888,7 @@
             button.prop('disabled', isRunning);
         };
 
-        angular.module('staffimUtils').directive(directiveName, ['$parse', function($parse) {
+        angular.module('staffimUtils').directive(directiveName, ['$parse', 'SULogger', function($parse, SULogger) {
             return {
                 restrict: 'A',
                 compile: function($element, attr) {
@@ -875,6 +906,7 @@
                             if (!scope.eventRunning) {
                                 scope.$apply(function() {
                                     scope.eventRunning = true;
+                                    SULogger[directiveName](element, attr[directiveName]);
                                     var result = $parse(attr[directiveName])(scope, {$event: event});
                                     if (!angular.isUndefined(result) && angular.isObject(result) && !angular.isUndefined(result.finally)) {
                                         result.finally(function() {
@@ -1083,3 +1115,23 @@
         });
     }
 })();
+
+'use strict';
+(function($) {
+    // duck-punching to make attr() return a map
+    var _old = $.fn.attr;
+    $.fn.attr = function() {
+        var a, aLength, attributes, map;
+        if (this[0] && arguments.length === 0) {
+            map = {};
+            attributes = this[0].attributes;
+            aLength = attributes.length;
+            for (a = 0; a < aLength; a++) {
+                map[attributes[a].name.toLowerCase()] = attributes[a].value;
+            }
+            return map;
+        } else {
+            return _old.apply(this, arguments);
+        }
+    }
+}(window.$));

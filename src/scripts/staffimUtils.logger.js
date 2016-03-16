@@ -12,8 +12,8 @@
         };
     }
 
-    SULogger.$inject = ['$window', '$injector'];
-    function SULogger($window, $injector) {
+    SULogger.$inject = ['$window', '$injector', 'moment'];
+    function SULogger($window, $injector, moment) {
         var logger,
             faker = {
                 error: function() {},
@@ -46,7 +46,8 @@
                                 host: $window.location.hostname
                             },
                             person: this.person,
-                            context: $state.current.name
+                            context: $state.current.name,
+                            timeline: JSON.stringify(this.timeline)
                         }
                     });
                 },
@@ -86,6 +87,35 @@
         } else {
             logger = faker;
         }
+
+        logger.timeline = [];
+        logger.changeState = function(state) {
+            logger.pushTimeline({
+                controller: state.controller,
+                name: state.name
+            }, 'changeState');
+        };
+        logger.ngClick = function(element, functionName) {
+            logger.pushTimeline({
+                innerHtml: element[0].innerHTML,
+                functionName: functionName
+            }, 'ngClick');
+        };
+        logger.ngSubmit = function(element, functionName) {
+            logger.pushTimeline({
+                functionName: functionName,
+                attributes: element.attr()
+            }, 'ngSubmit');
+        };
+        logger.pushTimeline = function(data, type) {
+            if (_.size(logger.timeline) > 20) {
+                logger.timeline = _.last(logger.timeline, 20);
+            }
+
+            data.timeline = moment().unix();
+            data.type = type;
+            logger.timeline.push(data);
+        };
 
         return logger;
     }

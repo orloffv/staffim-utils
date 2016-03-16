@@ -95,7 +95,7 @@
             button.prop('disabled', isRunning);
         };
 
-        angular.module('staffimUtils').directive(directiveName, ['$parse', function($parse) {
+        angular.module('staffimUtils').directive(directiveName, ['$parse', 'SULogger', function($parse, SULogger) {
             return {
                 restrict: 'A',
                 compile: function($element, attr) {
@@ -113,6 +113,7 @@
                             if (!scope.eventRunning) {
                                 scope.$apply(function() {
                                     scope.eventRunning = true;
+                                    SULogger[directiveName](element, attr[directiveName]);
                                     var result = $parse(attr[directiveName])(scope, {$event: event});
                                     if (!angular.isUndefined(result) && angular.isObject(result) && !angular.isUndefined(result.finally)) {
                                         result.finally(function() {

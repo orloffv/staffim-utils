@@ -28,7 +28,8 @@ module.exports = function(grunt) {
                     'src/scripts/staffimUtils.distanceFilter.js',
                     'src/scripts/staffimUtils.bootstrap.js',
                     'src/scripts/staffimUtils.analytic.js',
-                    'src/scripts/staffimUtils.toastr.js'
+                    'src/scripts/staffimUtils.toastr.js',
+                    'src/scripts/staffimUtils.jquery.js'
                 ],
                 dest: './dist/staffim-utils.js'
             }
