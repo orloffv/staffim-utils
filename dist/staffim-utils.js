@@ -510,6 +510,7 @@
                 },
                 init: function(person) {
                     this.person = person;
+                    this.configure();
                 },
                 configure: function() {
                     var $state = $injector.get('$state');
