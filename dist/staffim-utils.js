@@ -1019,6 +1019,7 @@
             }
 
             var unit = 0;
+            bytes = parseFloat(bytes);
 
             while (bytes >= 1024) {
                 bytes /= 1024;
