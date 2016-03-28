@@ -8,7 +8,12 @@
             accept: '\'image/*\'',
             allowEmptyResponse: false,
             acceptDropClass: '',
-            rejectDropClass: ''
+            rejectDropClass: '',
+            ngfResize: {
+                width: 1000,
+                quality: 0.7
+            },
+            ngfResizeIf: '$width > 1000 || $height > 1000'
         })
         .service('SUUploader', function($q, Upload, cfpLoadingBar, SUUploaderOptions) {
             var defaults = {
@@ -17,7 +22,9 @@
                 accept: SUUploaderOptions.accept,
                 allowEmptyResponse: SUUploaderOptions.allowEmptyResponse,
                 acceptDropClass: SUUploaderOptions.acceptDropClass,
-                rejectDropClass: SUUploaderOptions.rejectDropClass
+                rejectDropClass: SUUploaderOptions.rejectDropClass,
+                ngfResize: SUUploaderOptions.ngfResize,
+                ngfResizeIf: SUUploaderOptions.ngfResizeIf
             };
 
             var Uploader = function(opts, object, url, isImage) {
@@ -36,6 +43,8 @@
                         reject: this.options.rejectDropClass,
                         pattern: this.options.accept
                     };
+                    this.options.ngfResize = this.options.ngfResize;
+                    this.options.ngfResizeIf = this.options.ngfResizeIf;
 
                     Upload.setDefaults(this.options);
                 };
