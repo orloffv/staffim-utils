@@ -11,15 +11,18 @@
                 model: '=suUrl',
                 route: '@suUrlRoute',
                 params: '@suUrlParams',
-                options: '@suUrlOptions'
+                options: '@suUrlOptions',
+                oneTime: '@oneTime'
             },
             link: function ($scope, element) {
                 setHref(element);
-                $scope.$watch('model', function(newVal, oldVal) {
-                    if (!_.isEqual(getHref(newVal), getHref(oldVal))) {
-                        setHref(element);
-                    }
-                });
+                if (!$scope.oneTime) {
+                    $scope.$watch('model', function(newVal, oldVal) {
+                        if (!_.isEqual(getHref(newVal), getHref(oldVal))) {
+                            setHref(element);
+                        }
+                    });
+                }
 
                 function setHref(element) {
                     element.attr('ui-sref', SUUrlService.getStateName($scope.model, $scope.route, $scope.params));
