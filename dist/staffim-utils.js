@@ -999,8 +999,14 @@
                 };
 
                 if (preventDefault || hasHref) {
-                    element.on('click', clickHandler);
+                    element.on('click.aDirective', clickHandler);
                 }
+
+                var destroyScopeDestroyListener = scope.$on('$destroy', function() {
+                    element.off('.aDirective');
+
+                    destroyScopeDestroyListener();
+                });
             }
         };
     }
@@ -1025,7 +1031,7 @@
                                 }
                             }
                         });
-                        element.on(eventName, function(event) {
+                        element.on(eventName + '.' + directiveName, function(event) {
                             if (!scope.eventRunning) {
                                 scope.$apply(function() {
                                     scope.eventRunning = true;
@@ -1040,6 +1046,12 @@
                                     }
                                 });
                             }
+                        });
+
+                        var destroyScopeDestroyListener = scope.$on('$destroy', function() {
+                            element.off('.' + directiveName);
+
+                            destroyScopeDestroyListener();
                         });
                     };
                 }
