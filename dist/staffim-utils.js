@@ -884,17 +884,16 @@
     function SUUrlDirective(SUUrlService) {
         return {
             restrict: 'A',
-            scope: {
-                model: '=suUrl',
-                route: '@suUrlRoute',
-                params: '@suUrlParams',
-                options: '@suUrlOptions',
-                oneTime: '@oneTime'
-            },
-            link: function ($scope, element) {
+            link: function ($scope, element, attrs) {
+                var oneTime = attrs.suUrlOneTime,
+                    options = attrs.suUrlOptions,
+                    params = attrs.suUrlParams,
+                    route = attrs.suUrlRoute,
+                    model = $scope.$eval(attrs.suUrl);
+
                 setHref(element);
-                if (!$scope.oneTime) {
-                    $scope.$watch('model', function(newVal, oldVal) {
+                if (!oneTime) {
+                    $scope.$watch(attrs.suUrl, function(newVal, oldVal) {
                         if (!_.isEqual(getHref(newVal), getHref(oldVal))) {
                             setHref(element);
                         }
@@ -902,12 +901,12 @@
                 }
 
                 function setHref(element) {
-                    element.attr('ui-sref', SUUrlService.getStateName($scope.model, $scope.route, $scope.params));
-                    element.attr('href', getHref($scope.model));
+                    element.attr('ui-sref', SUUrlService.getStateName(model, route, params));
+                    element.attr('href', getHref(model));
                 }
 
                 function getHref(model) {
-                    return SUUrlService.getUrl(model, $scope.route, $scope.params, $scope.options);
+                    return SUUrlService.getUrl(model, route, params, options);
                 }
             }
         };
