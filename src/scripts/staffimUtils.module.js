@@ -1,4 +1,4 @@
 (function(){
-    angular.module('staffimUtils', ['ui.router', 'ngCookies']);
-    angular.module('staffimUtils.uploader', ['ngFileUpload', 'staffimAuth'])
+    angular.module('staffimUtils', ['ui.router', 'ngCookies', 'ngSanitize', 'ngNotify']);
+    angular.module('staffimUtils.uploader', ['ngFileUpload', 'staffimAuth']);
 })();
