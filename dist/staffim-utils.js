@@ -124,7 +124,7 @@
 
         function responseError(response) {
             var SAService = $injector.get('SAService');
-            if (response.config.url.indexOf(CONFIG.apiUrl) !== -1) {
+            if (_.has(response, 'config') && response.config.url.indexOf(CONFIG.apiUrl) !== -1) {
                 if (SAService.isValidAccessToken()) {
                     if (response.config.method === 'GET') {
                         if (response.status === 404) {
