@@ -1251,6 +1251,7 @@
         service.error = error;
         service.errorResponse = errorResponse;
         service.info = info;
+        service.warning = warning;
 
         function success(message, options) {
             return ngNotify.set(message, _.extend({type: 'success'}, options));
@@ -1262,6 +1263,10 @@
 
         function info(message, options) {
             return ngNotify.set(message, _.extend({type: 'info'}, options));
+        }
+
+        function warning(message, options) {
+            return ngNotify.set(message, _.extend({type: 'warn'}, options));
         }
 
         function errorResponse(response, message) {
