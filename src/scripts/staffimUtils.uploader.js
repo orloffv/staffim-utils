@@ -62,6 +62,14 @@
                     }
                 };
 
+                this.getBase64 = function() {
+                    if (this.object.file) {
+                        return this.object.file.$ngfDataUrl;
+                    }
+
+                    return null;
+                };
+
                 this.upload = function(requiredFile) {
                     var that = this;
                     requiredFile = requiredFile || false;
