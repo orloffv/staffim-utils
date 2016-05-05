@@ -1125,7 +1125,11 @@
 
                 var queryString = '?' + $.param(params);
 
-                return CONFIG.apiUrl + path + queryString;
+                if (_.startsWith(path, 'http')) {
+                    return path + queryString;
+                } else {
+                    return CONFIG.apiUrl + path + queryString;
+                }
             }
         };
     }
