@@ -436,11 +436,22 @@
         },
         copyModel: function(original, copyModel) {
             copyModel = angular.copy(original, copyModel);
-            _.each(original, function(item, key) { //Hack for hasMany relation save
-                if (_.isObject(item) && !_.isUndefined(item.length) && _.has(item, '$scope')) {
-                    copyModel[key] = item;
-                }
-            }, this);
+            copyMany(original, copyModel, 0);
+
+            //Hack for hasMany relation save
+            function copyMany(original, copyModel, depth) {
+                _.each(original, function(originalItem, key) {
+                    if (_.has(originalItem, '$scope')) {
+                        if (_.isObject(originalItem) && !_.isUndefined(originalItem.length)) {
+                            copyModel[key] = originalItem;
+                        } else {
+                            if (depth <=2) {
+                                copyMany(originalItem, copyModel[key], depth + 1);
+                            }
+                        }
+                    }
+                }, this);
+            }
 
             return copyModel;
         },
