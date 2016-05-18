@@ -42,6 +42,7 @@
     function fileManagerWhiteList(CONFIG, $sceDelegateProvider) {
         $sceDelegateProvider.resourceUrlWhitelist([
             'self',
+            'data:**',
             CONFIG.apiUrl + '/**'
         ]);
     }
