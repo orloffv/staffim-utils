@@ -434,6 +434,13 @@
 
             return collection;
         },
+        replaceItemArray: function(collection, find, replace) {
+            if (_.contains(collection, find)) {
+                collection[collection.indexOf(find)] = replace;
+            }
+
+            return collection;
+        },
         copyModel: function(original, copyModel) {
             copyModel = angular.copy(original, copyModel);
             copyMany(original, copyModel, 0);
