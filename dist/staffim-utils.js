@@ -556,7 +556,7 @@
 
                 this.getBase64 = function() {
                     if (this.object.file) {
-                        return this.object.file.$ngfDataUrl;
+                        return Upload.base64DataUrl(this.object.file);
                     }
 
                     return null;
