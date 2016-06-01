@@ -744,7 +744,7 @@
 'use strict';
 (function() {
     angular.module('staffimUtils')
-        .factory('SUFormatterDate', function(moment) {
+        .factory('SUFormatterDate', ['moment', function(moment) {
             return {
                 formatter: function(val) {
                     if (val) {
@@ -775,8 +775,8 @@
                     return null;
                 }
             };
-        })
-        .factory('SUFormatterDateTime', function(moment) {
+        }])
+        .factory('SUFormatterDateTime', ['moment', function(moment) {
             return {
                 formatter: function(val) {
                     return val ? (moment(val).format('YYYY-MM-DDTHH:mm:ss') + 'Z') : null;
@@ -785,8 +785,8 @@
                     return val ? moment(val).toDate() : null;
                 }
             };
-        })
-        .factory('SUFormatterWeek', function(moment) {
+        }])
+        .factory('SUFormatterWeek', ['moment', function(moment) {
             return {
                 formatter: function(val) {
                     if (val) {
@@ -831,7 +831,7 @@
                     return null;
                 }
             };
-        });
+        }]);
 })();
 
 'use strict';
