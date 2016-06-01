@@ -15,7 +15,7 @@
             },
             ngfResizeIf: '$width > 1000 || $height > 1000'
         })
-        .service('SUUploader', function($q, Upload, cfpLoadingBar, SUUploaderOptions) {
+        .service('SUUploader', ['$q', 'Upload', 'cfpLoadingBar', 'SUUploaderOptions', function($q, Upload, cfpLoadingBar, SUUploaderOptions) {
             var defaults = {
                 ngfAllowDir: SUUploaderOptions.ngfAllowDir,
                 ngfMaxSize: SUUploaderOptions.ngfMaxSize,
@@ -122,5 +122,5 @@
             };
 
             return Uploader;
-        });
+        }]);
 })();
