@@ -524,6 +524,7 @@
                     object = object || {file: null};
                     object.onChange = _.bind(this.onChange, this);
 
+                    this.loading = false;
                     this.object = object;
                     this.isImage = isImage || true;
                     this.url = url || SUUploaderOptions.url;
@@ -562,38 +563,49 @@
                     return null;
                 };
 
+                this.beforeModelChange = function(file) {
+                    if (file) {
+                        this.loading = true;
+                        cfpLoadingBar.start();
+                    }
+                };
+
                 this.upload = function(requiredFile) {
                     var that = this;
                     requiredFile = requiredFile || false;
                     var defer = $q.defer();
 
                     if (this.object.file) {
-                        cfpLoadingBar.start();
+                        if (!this.loading) {
+                            cfpLoadingBar.start();
+                        }
                         var upload = Upload.upload({
                             url: _.result(this, 'url'),
                             data: {file: this.object.file},
                             ignoreLoadingBar: true
                         });
                         upload
-                            .then(function(response) {
-                                if (that.isImage) {
-                                    object.data = null;
-                                }
+                            .then(
+                                function(response) {
+                                    if (that.isImage) {
+                                        object.data = null;
+                                    }
 
-                                if (!that.options.allowEmptyResponse && _.isObject(response) && _.isObject(response.data) && _.has(response.data, 'id')) {
-                                    defer.resolve(response.data.id);
-                                } else if (that.options.allowEmptyResponse) {
-                                    defer.resolve(response.data);
-                                } else {
-                                    defer.reject();
+                                    if (!that.options.allowEmptyResponse && _.isObject(response) && _.isObject(response.data) && _.has(response.data, 'id')) {
+                                        defer.resolve(response.data.id);
+                                    } else if (that.options.allowEmptyResponse) {
+                                        defer.resolve(response.data);
+                                    } else {
+                                        defer.reject();
+                                    }
+                                }, function(response) {
+                                    defer.reject(response);
+                                }, function(evt) {
+                                    cfpLoadingBar.set(evt.loaded / evt.total);
                                 }
-                            }, function(response) {
-                                defer.reject(response);
-                            }, function(evt) {
-                                cfpLoadingBar.set(evt.loaded / evt.total);
-                            }
-                        )
+                            )
                             .finally(function() {
+                                that.loading = false;
                                 cfpLoadingBar.complete();
                             });
                     } else if (requiredFile) {
