@@ -32,7 +32,8 @@ module.exports = function(grunt) {
                     'src/scripts/staffimUtils.jquery.js',
                     'src/scripts/staffimUtils.afterRenderDirective.js',
                     'src/scripts/staffimUtils.moment.js',
-                    'src/scripts/staffimUtils.storage.js'
+                    'src/scripts/staffimUtils.storage.js',
+                    'src/scripts/staffimUtils.deferred.js'
                 ],
                 dest: './dist/staffim-utils.js'
             }
