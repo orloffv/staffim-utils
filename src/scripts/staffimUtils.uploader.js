@@ -78,6 +78,11 @@
                     }
                 };
 
+                this.modelChange = function() {
+                    this.loading = false;
+                    cfpLoadingBar.complete();
+                };
+
                 this.upload = function(requiredFile) {
                     var that = this;
                     requiredFile = requiredFile || false;
