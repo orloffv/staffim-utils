@@ -8,7 +8,7 @@
     "package.json"
   ],
   "dependencies": {
-    "rollbar": "1.8.4",
+    "rollbar": "1.9.1",
     "underscore": "~1.8.3",
     "underscore.string": "~3.2.2",
     "ng-file-upload": "12.0.0",
