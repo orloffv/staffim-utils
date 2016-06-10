@@ -12,8 +12,9 @@
             //FAILED_REQUEST_OFFLINE: 'failed-request-offline',
             FAILED_REQUEST_404: 'failed-request-404',
             FAILED_REQUEST_500: 'failed-request-500',
-            FAILED_REQUEST_403: 'failed-request-403'
-            //FAILED_REQUEST_SERVER: 'failed-request-server'
+            FAILED_REQUEST_403: 'failed-request-403',
+            //FAILED_REQUEST_SERVER: 'failed-request-server',
+            'WINDOW_UNLOAD': 'window_unload'
         })
         .constant('moment', moment)
         .constant('jQuery', window.$);
@@ -1504,5 +1505,19 @@
             
             return $delegate;
         }]);
+    }
+})();
+
+'use strict';
+(function() {
+    angular.module('staffimUtils')
+        .run(broadcaster);
+
+    broadcaster.$inject = ['$rootScope', '$window', 'SU_EVENTS'];
+    function broadcaster($rootScope, $window, SU_EVENTS) {
+        $window.onunload = onunload;
+        function onunload() {
+            $rootScope.$broadcast(SU_EVENTS.WINDOW_UNLOAD);
+        }
     }
 })();
