@@ -98,6 +98,7 @@
         };
         logger.ngClick = function(element, functionName) {
             logger.pushTimeline({
+                xPath: element.getXPath(),
                 innerHtml: element[0].innerHTML,
                 functionName: functionName
             }, 'ngClick');
