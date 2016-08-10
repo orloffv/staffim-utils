@@ -35,7 +35,8 @@ module.exports = function(grunt) {
                     'src/scripts/staffimUtils.storage.js',
                     'src/scripts/staffimUtils.deferred.js',
                     'src/scripts/staffimUtils.broadcaster.js',
-                    'src/scripts/staffimUtils.lineBreaksFilter.js'
+                    'src/scripts/staffimUtils.lineBreaksFilter.js',
+                    'src/scripts/staffimUtils.checkUpdate.js'
                 ],
                 dest: './dist/staffim-utils.js'
             }
