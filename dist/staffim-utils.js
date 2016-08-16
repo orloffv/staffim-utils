@@ -1,6 +1,6 @@
 (function(){
     angular.module('staffimUtils', ['ui.router', 'ngSanitize', 'ngNotify']);
-    angular.module('staffimUtils.uploader', ['ngFileUpload', 'staffimAuth']);
+    angular.module('staffimUtils.uploader', ['ngFileUpload']);
 })();
 
 'use strict';
@@ -1137,8 +1137,8 @@
         .config(fileManagerWhiteList)
         .service('SUFileManager', SUFileManager);
 
-    SUFileManager.$inject = ['CONFIG', 'SAService'];
-    function SUFileManager(CONFIG, SAService) {
+    SUFileManager.$inject = ['CONFIG', '$injector'];
+    function SUFileManager(CONFIG, $injector) {
         return {
             remote: function(id, params) {
                 var queryString = '';
@@ -1156,6 +1156,14 @@
                 return CONFIG.assetsUrl + path;
             },
             remoteWithAccesToken: function(path, params) {
+                var SAService = {
+                    getAccessToken: function() {
+                        return null;
+                    }
+                };
+                if ($injector.has('SAService')) {
+                    SAService = $injector.get('SAService');
+                }
                 params = _.extend({
                     token: SAService.getAccessToken()
                 }, params || {});
