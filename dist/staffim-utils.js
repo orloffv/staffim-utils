@@ -1,5 +1,5 @@
 (function(){
-    angular.module('staffimUtils', ['ui.router', 'ngCookies', 'ngSanitize', 'ngNotify']);
+    angular.module('staffimUtils', ['ui.router', 'ngSanitize', 'ngNotify']);
     angular.module('staffimUtils.uploader', ['ngFileUpload', 'staffimAuth']);
 })();
 
@@ -1416,9 +1416,17 @@
     angular.module('staffimUtils')
         .service('SUStorage', SUStorage);
 
-    SUStorage.$inject = ['$window', '$cookieStore'];
-    function SUStorage($window, $cookieStore) {
+    SUStorage.$inject = ['$window', '$injector'];
+    function SUStorage($window, $injector) {
         var storage,
+            cookieStoragetore = {
+                isSupported: function() {
+                    return $injector.has('$cookieStore');
+                },
+                getStore: function() {
+                    return $injector.get('$cookieStore');
+                }
+            },
             localStorageStore = {
                 get: function(key) {
                     var value = $window.localStorage[key];
@@ -1450,7 +1458,7 @@
             },
             cookieStorage = {
                 get: function(key, defaultValue) {
-                    var value = $cookieStore.get(key);
+                    var value = cookieStoragetore.getStore().get(key);
 
                     if (_.isUndefined(value) && !_.isUndefined(defaultValue)) {
                         return defaultValue;
@@ -1459,10 +1467,10 @@
                     return value;
                 },
                 set: function(key, value) {
-                    $cookieStore.put(key, value);
+                    cookieStoragetore.getStore().put(key, value);
                 },
                 remove: function(key) {
-                    $cookieStore.remove(key);
+                    cookieStoragetore.getStore().remove(key);
                 },
                 type: 'cookie'
             },
@@ -1487,8 +1495,10 @@
 
         if (localStorageStore.isSupported()) {
             storage = localStorage;
-        } else {
+        } else if (cookieStoragetore.isSupported()) {
             storage = cookieStorage;
+        } else {
+            storage = {};
         }
 
         storage.increment = function(key) {
