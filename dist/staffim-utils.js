@@ -1133,7 +1133,7 @@
 
 'use strict';
 (function() {
-    angular.module('staffimUtils.uploader')
+    angular.module('staffimUtils')
         .config(fileManagerWhiteList)
         .service('SUFileManager', SUFileManager);
 
